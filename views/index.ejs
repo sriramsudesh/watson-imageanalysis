@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Bluemix IBM Watson </title>
+
+   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+ <!-- Custom styles for this template -->
+    
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <div class="container">
+
+      <div class="page-header">
+        <h1>IBM Bluemix with IBM Watson </h1>
+        <p class="lead">The example is built on Nodejs & Watson  Service</p>
+      </div>
+
+      
+      
+      <div class="row">
+        <div class="col-md-4"> </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+      </div>
+
+  
+      <form form id = "uploadForm"  enctype="multipart/form-data" action = "/" method= "post" onsubmit = "return ValidationEvent()"  >
+        <div class="form-group">
+            <label for="exampleInputFile">Browse and choose an image </label>
+            <input type="file" class="form-control-file" name="userpic"  id="exampleInputFile" aria-describedby="fileHelp" >
+
+            <small id="fileHelp" class="form-text text-muted">Choose an image with extension JPEG or PNG. We will use Watson Services for recognising the image</small>
+       </div>
+        
+          <button type="submit" id= "uploadID" class="btn btn-primary" >Upload Image</button> 
+          
+          </form>
+
+
+          <div>
+            <p id="demo"></p>
+          </div>
+     
+            <% if(result.length > 0) { %>
+                  <div class="form-group">
+                      <img src= <%= result%>  id = 'imageid' class="img-fluid" width="300" height="200" alt="Responsive image" >
+                   </div>
+                 <form form id = "analyze"  action = "/analyze" method= "get" >
+                      <div class="form-group">
+                      <button type="submit" id= "ID" class="btn btn-primary">Analyze</button> 
+                  </form>
+
+            <% } %>
+          
+    
+    </div> <!-- /container -->
+
+    <!-- Script tag-->
+    <script>
+
+        
+      function ValidationEvent() {
+
+        var userpic = document.getElementById("exampleInputFile").value;
+        //console.log(userpic);
+        //var image_x = document.getElementById('imageid');
+        
+        if(userpic != "") {
+          //document.getElementById('uploadID').style.visibility = 'hidden';
+          return true;
+        }
+        else if (userpic === "") {
+          document.getElementById("demo").innerHTML = "Select the picture using browse button";
+          
+          //document.getElementById("image_x").style.display='none';
+          //image_x.parentNode.removeChild(image_x);
+          return false;
+            }
+        else {
+           return false;
+        }
+      }
+
+    </script>
+
+
+    
+   
+  </body>
+</html>

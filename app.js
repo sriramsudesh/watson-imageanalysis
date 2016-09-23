@@ -10,7 +10,7 @@ var bodyParser = require('body-parser');
 var app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true
 }));
 app.use(bodyParser.json());
 app.use(express.static('uploads'));
@@ -27,78 +27,92 @@ var visual_recognition = watson.visual_recognition({
 
 
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function(req, file, cb) {
     cb(null, './uploads')
   },
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     cb(null, file.originalname) //Appending .jpg
   }
 })
 
-var upload = multer({ storage: storage });
+var upload = multer({
+  storage: storage
+});
 //var upload = multer({ dest: './uploads/' })
 
-var myanalysis = "" ;
+var myanalysis = "";
 
-app.get('/', function (req, res){
-    var result = "";
-    myanalysis = "" ;
-    res.render('index',{result : result,analyze : myanalysis});
+app.get('/', function(req, res) {
+  var result = "";
+  myanalysis = "" ;
+  res.render('index', {
+    result: result,
+    analyze: myanalysis
+  });
 });
 
 var originalfilename = "";
 
 
-app.post('/', upload.single('userpic') , function (req, res){
+app.post('/', upload.single('userpic'), function(req, res) {
 
-    var imageurl =  "";
-    originalfilename = req.file.originalname;
-    //console.log(appEnv.url);
-    //console.log(appEnv.getService('url'));
-       //imageurl = appEnv.url + appEnv.port + "/" + req.file.originalname;  
-       //imageurl = req.file.originalname; 
-       //console.log(imageurl); 
-       //var params = { images_file: fs.createReadStream('./uploads/' + req.file.originalname)};
-       //analyzePicture(params, function(response){
-        //console.log("response" + response);
-       //})
-    //console.log("Write my analysis" + myanalysis);
-    res.render('index',{result : originalfilename ,analyze : myanalysis});
+  var imageurl = "";
+  originalfilename = req.file.originalname;
+  //console.log(appEnv.url);
+  //console.log(appEnv.getService('url'));
+  //imageurl = appEnv.url + appEnv.port + "/" + req.file.originalname;
+  //imageurl = req.file.originalname;
+  //console.log(imageurl);
+  //var params = { images_file: fs.createReadStream('./uploads/' + req.file.originalname)};
+  //analyzePicture(params, function(response){
+  //console.log("response" + response);
+  //})
+  //console.log("Write my analysis" + myanalysis);
+  res.render('index', {
+    result: originalfilename,
+    analyze: myanalysis
+  });
 });
 
-app.get('/analyze', function (req, res){
+app.get('/analyze', function(req, res) {
 
-       var params = { images_file: fs.createReadStream('./uploads/' + originalfilename)};
-       
-     
-       //console.log(params);
-       analyzePicture(params, function(response){
-        //console.log("response" + response);
-       })
-    //console.log("Write my analysis" + myanalysis);
-    res.render("imageanalysis" ,{result:originalfilename, analyze: myanalysis});
-});
+  var params = {
+    images_file: fs.createReadStream('./uploads/' + originalfilename)
+  };
 
-
-function analyzePicture(params, callback){
-  visual_recognition.classify(params, function(err, res) {
-                    if (err) {
-                        //console.log('Hitting watson error');
-                        callback(error);
-                    } 
-            myanalysis = JSON.stringify(res, null, 2);
-            callback(myanalysis);
-            //console.log("This function called called back " + myanalysis);
-
+  var postAnalysisProcess = function(myAnalysisJson) {
+    //console.log("response" + response);
+    res.render("imageanalysis", {
+      result: originalfilename,
+      analyze: myAnalysisJson
     });
+  }
+
+  //console.log(params);
+  analyzePicture(params, postAnalysisProcess);
+  //console.log("Write my analysis" + myanalysis);
+
+});
+
+
+function analyzePicture(params, callback) {
+  var myAnalysisJson;
+  visual_recognition.classify(params, function(err, res) {
+    if (err) {
+      //console.log('Hitting watson error');
+      callback(error);
+    }
+    myAnalysisJson = JSON.stringify(res, null, 2);
+    callback(myAnalysisJson);
+    //console.log("This function called called back " + myanalysis);
+
+  });
 }
 
 
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, '0.0.0.0', function() {
-    // print a message when the server starts listening
-    console.log("server starting on " + appEnv.url);
+  // print a message when the server starts listening
+  console.log("server starting on " + appEnv.url);
 });
-
-
