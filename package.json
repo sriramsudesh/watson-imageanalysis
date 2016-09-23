@@ -1,0 +1,25 @@
+{
+  "name": "NodejsStarterApp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "",
+    "cfenv": "1.0.x",
+    "connect-multiparty": "*",
+    "ejs": "^1.0.0",
+    "express": "4.13.x",
+    "formidable": "*",
+    "fs-extra": "*",
+    "memory-cache": "^0.1.6",
+    "mongodb": "*",
+    "multer": "1.1.0",
+    "quickthumb": "*"
+  },
+  "repository": {},
+  "engines": {
+    "node": "4.x"
+  }
+}
